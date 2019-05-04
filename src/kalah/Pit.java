@@ -15,7 +15,7 @@ public abstract class Pit {
         return this.seeds;
     }
 
-    public void setNoSeeds(int seeds) {
+    public void setNumSeeds(int seeds) {
         this.seeds = seeds;
     }
 }

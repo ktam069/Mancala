@@ -8,9 +8,11 @@ import com.qualitascorpus.testsupport.MockIO;
  * the test infrastructure.
  */
 public class Kalah {
+
 	public static void main(String[] args) {
 		new Kalah().play(new MockIO());
 	}
+
 	public void play(IO io) {
 		// Replace what's below with your implementation
 		io.println("+----+-------+-------+-------+-------+-------+-------+----+");
@@ -19,5 +21,13 @@ public class Kalah {
 		io.println("|  0 | 1[ 4] | 2[ 4] | 3[ 4] | 4[ 4] | 5[ 4] | 6[ 4] | P1 |");
 		io.println("+----+-------+-------+-------+-------+-------+-------+----+");
 		io.println("Player 1's turn - Specify house number or 'q' to quit: ");
+
+		System.out.println("- starting program -");
+
+		// Start Input/Output Handler, which will also starts the game
+		IOHandler ioHandler = new IOHandler(io);
+
+		// Start the game: this will run forever until the game is quit
+		ioHandler.run();
 	}
 }

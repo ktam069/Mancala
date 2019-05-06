@@ -2,6 +2,9 @@ package kalah;
 
 import com.qualitascorpus.testsupport.IO;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class IOHandler {
     private static final int NUM_HOUSES = 12;
     private static final int NUM_STORES = 2;    // This might be redundant as it would always be two
@@ -18,7 +21,7 @@ public class IOHandler {
 
     public void run() {
         boolean moveMade;
-        boolean gameOver = false;
+        boolean gameEnded = false;
 
         // Runs the game forever until the game is quit with 'q'
         while(true) {
@@ -28,13 +31,20 @@ public class IOHandler {
                 // Print the current state of the board
                 printGameState();
 
+                // Terminate the game if one side has no seeds left
+                if (board.housesEmpty()) {
+                    printGameEnded();
+                    gameEnded = true;
+                    break;
+                }
+
                 // Wait for input for proceeding to the next turn
                 String userInput = getInput();
 
                 // Terminate the program upon the input of 'q'
                 if (userInput.equals("q")) {
                     printGameOver();
-                    gameOver = true;
+                    gameEnded = true;
                     break;
                 }
 
@@ -53,7 +63,7 @@ public class IOHandler {
                 moveMade = true;
             }
 
-            if (gameOver) { break; }
+            if (gameEnded) { break; }
         }
     }
 
@@ -127,5 +137,30 @@ public class IOHandler {
     private void printGameOver() {
         io.println("Game over");
         printGameState();
+    }
+
+    private void printGameEnded() {
+        printGameOver();
+        board.gameEndTallying();
+
+        int newScore;
+        ArrayList<Integer> scores = new ArrayList<Integer>();
+
+        for (int i = 0; i < NUM_STORES; i++) {
+            newScore = board.getStoreSeeds(i);
+            io.println("\tplayer "+(i+1)+":"+newScore);
+            scores.add(newScore);
+        }
+
+        int maxScore = Collections.max(scores);
+        int winner = scores.indexOf(maxScore);
+
+        // Determine result based on whether there are more than one player with max score
+        if (winner == scores.lastIndexOf(maxScore)) {
+            io.println("Player "+(winner+1)+" wins!");
+        } else {
+            io.println("A tie!");
+        }
+
     }
 }

@@ -104,6 +104,39 @@ public class Board {
         return readStoreSeeds(playerNum);
     }
 
+    public boolean housesEmpty() {
+        int numHousesPerPlayer = NUM_HOUSES/NUM_STORES;
+        int startI = currentPlayerNum   * numHousesPerPlayer;
+        int endI = (currentPlayerNum+1) * numHousesPerPlayer;
+
+        boolean allEmpty = true;
+        for (int i = startI; i < endI; i++) {
+            allEmpty = allEmpty && (readHouseSeeds(i) == 0);
+        }
+
+        return allEmpty;
+    }
+
+    /* Move all remaining seeds into the respective players' stores */
+    public void gameEndTallying() {
+        int numHousesPerPlayer = NUM_HOUSES/NUM_STORES;
+        int startI, endI;
+        int numSeeds;
+
+        for (int j = 0; j < NUM_STORES; j++) {
+            startI = j   * numHousesPerPlayer;
+            endI = (j+1) * numHousesPerPlayer;
+
+            for (int i = startI; i < endI; i++) {
+                numSeeds = readHouseSeeds(i);
+                writeHouseSeeds(i, 0);
+                addStoreSeeds(j, numSeeds);
+            }
+        }
+    }
+
+    // TODO: Fix naming convention / inconsistencies between houseNum vs houseI, etc.
+
     // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
     private int readHouseSeeds(int houseNum) {
         return houses[houseNum].getNumSeeds();

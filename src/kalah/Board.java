@@ -41,6 +41,7 @@ public class Board {
                 // Reached the player 2's store
                 if (currentPlayerNum == 0) {
                     addHouseSeeds(houseI);
+                    if (numSeeds==1) { attemptCapture(houseI); }
                 } else {
                     addStoreSeeds(currentPlayerNum);
                     numSeeds--;
@@ -52,11 +53,13 @@ public class Board {
                     }
 
                     addHouseSeeds(houseI);
+                    if (numSeeds==1) { attemptCapture(houseI); }
                 }
-            } else if (houseI == NUM_HOUSES/2) {
+            } else if (houseI == NUM_HOUSES/NUM_STORES) {
                 // Reached the player 1's store
                 if (currentPlayerNum == 1) {
                     addHouseSeeds(houseI);
+                    if (numSeeds==1) { attemptCapture(houseI); }
                 } else {
                     addStoreSeeds(currentPlayerNum);
                     numSeeds--;
@@ -68,9 +71,11 @@ public class Board {
                     }
 
                     addHouseSeeds(houseI);
+                    if (numSeeds==1) { attemptCapture(houseI); }
                 }
             } else {
                 addHouseSeeds(houseI);
+                if (numSeeds==1) { attemptCapture(houseI); }
             }
 
             numSeeds--;
@@ -119,12 +124,22 @@ public class Board {
 
     // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
     private void addHouseSeeds(int houseNum) {
-        writeHouseSeeds(houseNum, readHouseSeeds(houseNum)+1);
+        addHouseSeeds(houseNum, 1);
+    }
+
+    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
+    private void addHouseSeeds(int houseNum, int numToAdd) {
+        writeHouseSeeds(houseNum, readHouseSeeds(houseNum)+numToAdd);
     }
 
     // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
     private void addStoreSeeds(int playerNum) {
-        writeStoreSeeds(playerNum, readStoreSeeds(playerNum)+1);
+        addStoreSeeds(playerNum, 1);
+    }
+
+    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
+    private void addStoreSeeds(int playerNum, int numToAdd) {
+        writeStoreSeeds(playerNum, readStoreSeeds(playerNum)+numToAdd);
     }
 
     private void toggleCurrentPlayer() {
@@ -134,7 +149,19 @@ public class Board {
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
     private int houseNumToArrayIndex(int playerNum, int houseNum) {
         if (playerNum < 0 || playerNum > 1 || houseNum < 0 || houseNum > 5) { return -1; }
-        return houseNum + playerNum*(NUM_HOUSES /2);
+        return houseNum + playerNum*(NUM_HOUSES/NUM_STORES);
+    }
+
+    private void attemptCapture(int currentHouseI) {
+        int oppositeHouseI = findOppositeArrayIndex(currentHouseI);
+
+        if (readHouseSeeds(currentHouseI) == 1 && indexBelongsToPlayer(currentHouseI)) {
+            captureOpposite(oppositeHouseI);
+
+            // Move the seed in the player's house into their store as well
+            writeHouseSeeds(currentHouseI, 0);
+            addStoreSeeds(currentPlayerNum, 1);
+        }
     }
 
     /* Calculates the index of the house that is opposite to this one */
@@ -143,7 +170,7 @@ public class Board {
         int max = NUM_HOUSES-1;
         int diff;
         int result;
-        if (i <= NUM_HOUSES/2) {
+        if (i <= NUM_HOUSES/NUM_STORES) {
             diff = i - min;
             result = max - diff;
         } else {
@@ -151,5 +178,18 @@ public class Board {
             result = min + diff;
         }
         return result;
+    }
+
+    private boolean indexBelongsToPlayer(int arrayIndex) {
+        return (currentPlayerNum==0)&&(arrayIndex <= NUM_HOUSES/NUM_STORES)
+                || (currentPlayerNum==1)&&(arrayIndex > NUM_HOUSES/NUM_STORES);
+    }
+
+    private void captureOpposite(int houseNumToCapture) {
+        int numSeeds = readHouseSeeds(houseNumToCapture);
+
+        // Capture the opposite house
+        writeHouseSeeds(houseNumToCapture, 0);
+        addStoreSeeds(currentPlayerNum, numSeeds);
     }
 }

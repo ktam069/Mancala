@@ -22,11 +22,12 @@ public class IOHandler {
 
         // Runs the game forever until the game is quit with 'q'
         while(true) {
-            // Print the current state of the board
-            printGameState();
-
             moveMade = false;
+
             while (!moveMade) {
+                // Print the current state of the board
+                printGameState();
+
                 // Wait for input for proceeding to the next turn
                 String userInput = getInput();
 
@@ -39,8 +40,14 @@ public class IOHandler {
 
                 // Process the input and update the game's state
                 int houseNum = inputToInt(userInput);
-                if (houseNum < 0 || houseNum > NUM_HOUSES/2) { break; /* TODO: (Invalid input) How should this be handled? */ }
-                if (this.board.getHouseSeeds(this.board.getPlayerNum(), houseNum) < 1) { break; /* TODO: (Empty house) How should this be handled? */ }
+                if (houseNum < 0 || houseNum > NUM_HOUSES/2) {
+                    io.println("Invalid input. Move again.");
+                    continue;
+                }
+                if (this.board.getHouseSeeds(this.board.getPlayerNum(), houseNum) < 1) {
+                    io.println("House is empty. Move again.");
+                    continue;
+                }
                 board.processMove(houseNum);
 
                 moveMade = true;
@@ -53,9 +60,9 @@ public class IOHandler {
     private void printGameState() {
         // TODO: Could proabably improve the handling of P1 vs P2 to avoid duplicate code
 
-        String lineToPrint = "";
-        int numSeeds = -1;
-        int playerNum = -1;
+        String lineToPrint;
+        int numSeeds;
+        int playerNum;
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");
 
@@ -64,28 +71,38 @@ public class IOHandler {
         lineToPrint = "| P2 | ";
         for (int i = (NUM_HOUSES/2)-1; i >= 0 ; i--) {
             numSeeds = this.board.getHouseSeeds(playerNum, i);
-            lineToPrint += (i+1)+"[ "+numSeeds+"] | ";
+            lineToPrint += (i+1)+"[";
+            if (numSeeds < 10) { lineToPrint += " "; }
+            lineToPrint += numSeeds+"] | ";
         }
+
         // Format P1 Store
         playerNum = 0;
         numSeeds = this.board.getStoreSeeds(playerNum);
-        lineToPrint += " "+numSeeds+" |";
+        if (numSeeds < 10) { lineToPrint += " "; }
+        lineToPrint += numSeeds+" |";
+
         io.println(lineToPrint);
 
         io.println("|    |-------+-------+-------+-------+-------+-------|    |");
 
         // Format P2 Store
         playerNum = 1;
-        lineToPrint = "| ";
+        lineToPrint = "|";
         numSeeds = this.board.getStoreSeeds(playerNum);
+        if (numSeeds < 10) { lineToPrint += " "; }
         lineToPrint += " "+numSeeds+" | ";
+
         // Format P1 Houses
         playerNum = 0;
         for (int i = 0; i < NUM_HOUSES/2; i++) {
             numSeeds = this.board.getHouseSeeds(playerNum, i);
-            lineToPrint += (i+1)+"[ "+numSeeds+"] | ";
+            lineToPrint += (i+1)+"[";
+            if (numSeeds < 10) { lineToPrint += " "; }
+            lineToPrint += numSeeds+"] | ";
         }
         lineToPrint += "P1 |";
+
         io.println(lineToPrint);
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");

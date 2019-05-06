@@ -7,10 +7,6 @@ public abstract class Pit {
         this.seeds = numSeeds;
     }
 
-    public void addASeed() {
-        this.seeds++;
-    }
-
     public int getNumSeeds() {
         return this.seeds;
     }

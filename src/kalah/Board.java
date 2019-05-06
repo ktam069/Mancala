@@ -46,7 +46,7 @@ public class Board {
                     numSeeds--;
 
                     if (numSeeds == 0) {
-                        // TODO: extra turn(?)
+                        // Extra turn
                         toggleCurrentPlayer();
                         break;
                     }
@@ -62,7 +62,7 @@ public class Board {
                     numSeeds--;
 
                     if (numSeeds == 0) {
-                        // TODO: extra turn(?)
+                        // Extra turn
                         toggleCurrentPlayer();
                         break;
                     }
@@ -120,7 +120,6 @@ public class Board {
     // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
     private void addHouseSeeds(int houseNum) {
         writeHouseSeeds(houseNum, readHouseSeeds(houseNum)+1);
-// TODO: OR houses[houseNum].addASeed();
     }
 
     // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
@@ -133,8 +132,24 @@ public class Board {
     }
 
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
-    private int houseNumToArrayIndex(int playerNum, int houseNum){
+    private int houseNumToArrayIndex(int playerNum, int houseNum) {
         if (playerNum < 0 || playerNum > 1 || houseNum < 0 || houseNum > 5) { return -1; }
         return houseNum + playerNum*(NUM_HOUSES /2);
+    }
+
+    /* Calculates the index of the house that is opposite to this one */
+    private int findOppositeArrayIndex(int i) {
+        int min = 0;
+        int max = NUM_HOUSES-1;
+        int diff;
+        int result;
+        if (i <= NUM_HOUSES/2) {
+            diff = i - min;
+            result = max - diff;
+        } else {
+            diff = max - i;
+            result = min + diff;
+        }
+        return result;
     }
 }

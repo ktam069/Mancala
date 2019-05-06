@@ -81,6 +81,8 @@ public class Board {
             numSeeds--;
         }
 
+        // TODO: Handle game ending when there are no seeds left on the current player's side
+
         toggleCurrentPlayer();
     }
 
@@ -156,6 +158,8 @@ public class Board {
         int oppositeHouseI = findOppositeArrayIndex(currentHouseI);
 
         if (readHouseSeeds(currentHouseI) == 1 && indexBelongsToPlayer(currentHouseI)) {
+            if (readHouseSeeds(oppositeHouseI) == 0) { return; }
+
             captureOpposite(oppositeHouseI);
 
             // Move the seed in the player's house into their store as well
@@ -170,19 +174,20 @@ public class Board {
         int max = NUM_HOUSES-1;
         int diff;
         int result;
-        if (i <= NUM_HOUSES/NUM_STORES) {
+        if (i < NUM_HOUSES/NUM_STORES) {
             diff = i - min;
             result = max - diff;
         } else {
             diff = max - i;
             result = min + diff;
         }
+        // TODO: Check the above is correct and check if it can be simplified (by running just the first part)
         return result;
     }
 
     private boolean indexBelongsToPlayer(int arrayIndex) {
-        return (currentPlayerNum==0)&&(arrayIndex <= NUM_HOUSES/NUM_STORES)
-                || (currentPlayerNum==1)&&(arrayIndex > NUM_HOUSES/NUM_STORES);
+        return (currentPlayerNum==0)&&(arrayIndex < NUM_HOUSES/NUM_STORES)
+                || (currentPlayerNum==1)&&(arrayIndex >= NUM_HOUSES/NUM_STORES);
     }
 
     private void captureOpposite(int houseNumToCapture) {

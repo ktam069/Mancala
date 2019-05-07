@@ -1,14 +1,12 @@
 package kalah;
 
-import com.qualitascorpus.testsupport.IO;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class GameHandler {
-    private static final int NUM_PLAYERS = Settings.NUM_PLAYERS;
-    private static final int NUM_HOUSES = Settings.NUM_HOUSES;
+    private final int NUM_PLAYERS = Settings.NUM_PLAYERS;
+    private final int NUM_HOUSES = Settings.NUM_HOUSES;
 
     private IOHandler ioHandler;
     private Board board;

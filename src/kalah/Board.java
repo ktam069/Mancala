@@ -1,27 +1,27 @@
 package kalah;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     // Note that houses are indexed anticlockwise starting from house one of player one
-    private Pit[] houses;
-    private Pit[] stores;
+    private List<Pit> houses = new ArrayList<Pit>();
+    private List<Pit> stores = new ArrayList<Pit>();
 
-    private int NUM_HOUSES = Settings.NUM_HOUSES;
-    private int NUM_PLAYERS = Settings.NUM_PLAYERS;
+    private final int NUM_HOUSES = Settings.NUM_HOUSES;
+    private final int NUM_PLAYERS = Settings.NUM_PLAYERS;
 
-    // TODO: Create players; change array into arrayLists (?)
+    // TODO: Create players
 
-    // The player number whose turn it is (should be either 0 or 1)
+    // The player number whose turn it is (should be either 0 or 1 if there are two players)
     private int currentPlayerNum = 0;
 
     public Board() {
-        houses = new House[NUM_HOUSES];
-        stores = new Store[NUM_PLAYERS];
-
         for (int i = 0; i < NUM_HOUSES; i++) {
-            houses[i] = new House();
+            houses.add(new House());
         }
         for (int i = 0; i < NUM_PLAYERS; i++) {
-            stores[i] = new Store();
+            stores.add(new Store());
         }
     }
 
@@ -136,19 +136,19 @@ public class Board {
     // NOTE: Wrapped in methods to reduce syntactic dependencies if changing data structure
 
     private int readHouseSeeds(int houseI) {
-        return houses[houseI].getNumSeeds();
+        return houses.get(houseI).getNumSeeds();
     }
 
     private int readStoreSeeds(int playerI) {
-        return stores[playerI].getNumSeeds();
+        return stores.get(playerI).getNumSeeds();
     }
 
     private void writeHouseSeeds(int houseI, int seedNum) {
-        houses[houseI].setNumSeeds(seedNum);
+        houses.get(houseI).setNumSeeds(seedNum);
     }
 
     private void writeStoreSeeds(int playerI, int seedNum) {
-        stores[playerI].setNumSeeds(seedNum);
+        stores.get(playerI).setNumSeeds(seedNum);
     }
 
     private void addHouseSeeds(int houseI) {

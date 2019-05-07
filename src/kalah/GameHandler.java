@@ -46,11 +46,11 @@ public class GameHandler {
 
                 // Process the input and update the game's state
                 int houseNum = inputToInt(userInput);
-                if (houseNum < 0 || houseNum > Settings.NUM_HOUSES /2) {
+                if (houseNum < 0 || houseNum > Settings.NUM_HOUSES/2-1) {
                     ioHandler.printInvalidInput();
                     continue;
                 }
-                if (this.board.getHouseSeeds(this.board.getPlayerI(), houseNum) < 1) {
+                if (board.getHouseSeeds(board.getPlayerI(), houseNum) < 1) {
                     ioHandler.printInvalidMove();
                     continue;
                 }

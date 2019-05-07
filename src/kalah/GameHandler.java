@@ -50,7 +50,7 @@ public class GameHandler {
                     ioHandler.printInvalidInput();
                     continue;
                 }
-                if (this.board.getHouseSeeds(this.board.getPlayerNum(), houseNum) < 1) {
+                if (this.board.getHouseSeeds(this.board.getPlayerI(), houseNum) < 1) {
                     ioHandler.printInvalidMove();
                     continue;
                 }
@@ -104,7 +104,7 @@ public class GameHandler {
     }
 
     private String getInput() {
-        int playerNum = board.getPlayerNum() + 1;
+        int playerNum = board.getPlayerI() + 1;
 
         return ioHandler.getUserInput(playerNum);
     }

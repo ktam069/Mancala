@@ -6,7 +6,7 @@ import java.util.List;
 public class Board {
     // Note that houses are indexed anticlockwise starting from house one of player one
     // TODO
-//    private List<Pit> pits = new ArrayList<Pit>();
+    private List<Pit> pits = new ArrayList<Pit>();
 
     // TODO: manage pits by using their owners
 
@@ -14,20 +14,22 @@ public class Board {
     private List<Pit> stores = new ArrayList<Pit>();
 
     // The player number whose turn it is (should be either 0 or 1 if there are two players)
-    private int currentPlayerNum = 0;
+    private int currentPlayerI = Settings.STARTING_PLAYER_INDEX;
 
     public Board() {
         for (int playerI = 0; playerI < Settings.NUM_PLAYERS; playerI++) {
             // Create houses and stores for each player
             for (int j = 0; j < Settings.NUM_HOUSES_PER_PLAYER; j++) {
                 houses.add(new House(playerI));
+//                pits.add(new House(playerI));
             }
             stores.add(new Store(playerI));
+//            pits.add(new Store(playerI));
         }
     }
 
     public void processMove(int houseNum) {
-        int houseI = houseNumToArrayIndex(currentPlayerNum, houseNum);
+        int houseI = houseNumToArrayIndex(currentPlayerI, houseNum);
         int numSeeds = readHouseSeeds(houseI);
 
         // Clear the seeds in the house to be processed
@@ -37,31 +39,13 @@ public class Board {
         while (numSeeds > 0) {
             houseI = (houseI + 1) % Settings.NUM_HOUSES;
 
-            if (houseI == 0) {
-                // Reached the player 2's store
-                if (currentPlayerNum == 0) {
+            if (houseI % Settings.NUM_HOUSES_PER_PLAYER == 0) {
+                // Reached the/an opposition player's store
+                if (currentPlayerI == getHouseOwner(houseI)) {
                     addHouseSeeds(houseI);
                     attemptCapture(houseI, numSeeds);
                 } else {
-                    addStoreSeeds(currentPlayerNum);
-                    numSeeds--;
-
-                    if (numSeeds == 0) {
-                        // Extra turn
-                        toggleCurrentPlayer();
-                        break;
-                    }
-
-                    addHouseSeeds(houseI);
-                    attemptCapture(houseI, numSeeds);
-                }
-            } else if (houseI == Settings.NUM_HOUSES / Settings.NUM_PLAYERS) {
-                // Reached the player 1's store
-                if (currentPlayerNum == 1) {
-                    addHouseSeeds(houseI);
-                    attemptCapture(houseI, numSeeds);
-                } else {
-                    addStoreSeeds(currentPlayerNum);
+                    addStoreSeeds(currentPlayerI);
                     numSeeds--;
 
                     if (numSeeds == 0) {
@@ -85,8 +69,8 @@ public class Board {
     }
 
     /* Returns whether it's player 1's turn (returns 0) or player 2's turn (returns 1) */
-    public int getPlayerNum() {
-        return currentPlayerNum;
+    public int getPlayerI() {
+        return currentPlayerI;
     }
 
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
@@ -105,8 +89,8 @@ public class Board {
     /* Checks if the current player has any seeds in houses */
     public boolean housesEmpty() {
         int numHousesPerPlayer = Settings.NUM_HOUSES/ Settings.NUM_PLAYERS;
-        int startI = currentPlayerNum   * numHousesPerPlayer;
-        int endI = (currentPlayerNum+1) * numHousesPerPlayer;
+        int startI = currentPlayerI * numHousesPerPlayer;
+        int endI = (currentPlayerI +1) * numHousesPerPlayer;
 
         boolean allEmpty = true;
         for (int i = startI; i < endI; i++) {
@@ -168,8 +152,18 @@ public class Board {
         writeStoreSeeds(playerI, readStoreSeeds(playerI)+numToAdd);
     }
 
+    private int getHouseOwner(int houseIndex) {
+        Pit pit = houses.get(houseIndex);
+        return pit.getOwnerIndex();
+    }
+
+    private int getPitOwner(int pitIndex) {
+        Pit pit = pits.get(pitIndex);
+        return pit.getOwnerIndex();
+    }
+
     private void toggleCurrentPlayer() {
-        currentPlayerNum = (currentPlayerNum+1) % Settings.NUM_PLAYERS;
+        currentPlayerI = (currentPlayerI +1) % Settings.NUM_PLAYERS;
     }
 
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
@@ -190,7 +184,7 @@ public class Board {
 
             // Move the seed in the player's house into their store as well
             writeHouseSeeds(currentHouseI, 0);
-            addStoreSeeds(currentPlayerNum, 1);
+            addStoreSeeds(currentPlayerI, 1);
         }
     }
 
@@ -201,8 +195,8 @@ public class Board {
     }
 
     private boolean indexBelongsToPlayer(int arrayIndex) {
-        return (currentPlayerNum==0)&&(arrayIndex < Settings.NUM_HOUSES/ Settings.NUM_PLAYERS)
-                || (currentPlayerNum==1)&&(arrayIndex >= Settings.NUM_HOUSES/ Settings.NUM_PLAYERS);
+        return (currentPlayerI ==0)&&(arrayIndex < Settings.NUM_HOUSES/ Settings.NUM_PLAYERS)
+                || (currentPlayerI ==1)&&(arrayIndex >= Settings.NUM_HOUSES/ Settings.NUM_PLAYERS);
     }
 
     private void captureOpposite(int houseIToCapture) {
@@ -210,6 +204,6 @@ public class Board {
 
         // Capture the opposite house
         writeHouseSeeds(houseIToCapture, 0);
-        addStoreSeeds(currentPlayerNum, numSeeds);
+        addStoreSeeds(currentPlayerI, numSeeds);
     }
 }

@@ -78,7 +78,7 @@ public class Board {
     /* Checks if the current player has any seeds in houses */
     public boolean housesEmpty() {
         int startI = currentPlayerI * Settings.NUM_PITS_PER_SIDE;
-        int endI = (currentPlayerI +1) * Settings.NUM_PITS_PER_SIDE - 1;
+        int endI = (currentPlayerI+1) * Settings.NUM_PITS_PER_SIDE - 1;
 
         boolean allEmpty = true;
         for (int i = startI; i < endI; i++) {

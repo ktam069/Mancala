@@ -6,17 +6,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class IOHandler {
-    private static final int NUM_HOUSES = 12;
-    private static final int NUM_STORES = 2;    // This might be redundant as it would always be two
+    private static final int NUM_PLAYERS = Settings.NUM_PLAYERS;
+    private static final int NUM_HOUSES = Settings.NUM_HOUSES;
 
     private IO io;
     private Board board;
+
+    // TODO: Move printing into its own class
 
     public IOHandler(IO io) {
         this.io = io;
 
         // Create a game board, instantiating the board
-        this.board = new Board(NUM_HOUSES, NUM_STORES);
+        this.board = new Board();
     }
 
     public void run() {
@@ -50,7 +52,7 @@ public class IOHandler {
 
                 // Process the input and update the game's state
                 int houseNum = inputToInt(userInput);
-                if (houseNum < 0 || houseNum > NUM_HOUSES/2) {
+                if (houseNum < 0 || houseNum > NUM_HOUSES /2) {
                     io.println("Invalid input. Move again.");
                     continue;
                 }
@@ -68,7 +70,7 @@ public class IOHandler {
     }
 
     private void printGameState() {
-        // TODO: Could proabably improve the handling of P1 vs P2 to avoid duplicate code
+        // TODO: Could probably improve the handling of P1 vs P2 to avoid duplicate code
 
         String lineToPrint;
         int numSeeds;
@@ -79,7 +81,7 @@ public class IOHandler {
         // Format P2 Houses
         playerNum = 1;
         lineToPrint = "| P2 | ";
-        for (int i = (NUM_HOUSES/2)-1; i >= 0 ; i--) {
+        for (int i = (NUM_HOUSES /2)-1; i >= 0 ; i--) {
             numSeeds = this.board.getHouseSeeds(playerNum, i);
             lineToPrint += (i+1)+"[";
             if (numSeeds < 10) { lineToPrint += " "; }
@@ -105,7 +107,7 @@ public class IOHandler {
 
         // Format P1 Houses
         playerNum = 0;
-        for (int i = 0; i < NUM_HOUSES/2; i++) {
+        for (int i = 0; i < NUM_HOUSES /2; i++) {
             numSeeds = this.board.getHouseSeeds(playerNum, i);
             lineToPrint += (i+1)+"[";
             if (numSeeds < 10) { lineToPrint += " "; }
@@ -146,7 +148,7 @@ public class IOHandler {
         int newScore;
         ArrayList<Integer> scores = new ArrayList<Integer>();
 
-        for (int i = 0; i < NUM_STORES; i++) {
+        for (int i = 0; i < NUM_PLAYERS; i++) {
             newScore = board.getStoreSeeds(i);
             io.println("\tplayer "+(i+1)+":"+newScore);
             scores.add(newScore);

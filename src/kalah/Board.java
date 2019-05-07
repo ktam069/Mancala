@@ -2,28 +2,27 @@ package kalah;
 
 public class Board {
     // Note that houses are indexed anticlockwise starting from house one of player one
-    private House[] houses;
-    private Store[] stores;
+    private Pit[] houses;
+    private Pit[] stores;
 
-    private int NUM_HOUSES;
-    private int NUM_STORES;
+    private int NUM_HOUSES = Settings.NUM_HOUSES;
+    private int NUM_PLAYERS = Settings.NUM_PLAYERS;
+
+    // TODO: Create players; change array into arrayLists (?)
 
     // The player number whose turn it is (should be either 0 or 1)
     private int currentPlayerNum = 0;
 
-    public Board(int numHouses, int numStores) {
-        houses = new House[numHouses];
-        stores = new Store[numStores];
+    public Board() {
+        houses = new House[NUM_HOUSES];
+        stores = new Store[NUM_PLAYERS];
 
-        for (int i = 0; i < numHouses; i++) {
+        for (int i = 0; i < NUM_HOUSES; i++) {
             houses[i] = new House();
         }
-        for (int i = 0; i < numStores; i++) {
+        for (int i = 0; i < NUM_PLAYERS; i++) {
             stores[i] = new Store();
         }
-
-        this.NUM_HOUSES = numHouses;
-        this.NUM_STORES = numStores;
     }
 
     public void processMove(int houseNum) {
@@ -55,7 +54,7 @@ public class Board {
                     addHouseSeeds(houseI);
                     if (numSeeds==1) { attemptCapture(houseI); }
                 }
-            } else if (houseI == NUM_HOUSES/NUM_STORES) {
+            } else if (houseI == NUM_HOUSES/ NUM_PLAYERS) {
                 // Reached the player 1's store
                 if (currentPlayerNum == 1) {
                     addHouseSeeds(houseI);
@@ -81,8 +80,6 @@ public class Board {
             numSeeds--;
         }
 
-        // TODO: Handle game ending when there are no seeds left on the current player's side
-
         toggleCurrentPlayer();
     }
 
@@ -104,8 +101,9 @@ public class Board {
         return readStoreSeeds(playerNum);
     }
 
+    /* Checks if the current player has any seeds in houses */
     public boolean housesEmpty() {
-        int numHousesPerPlayer = NUM_HOUSES/NUM_STORES;
+        int numHousesPerPlayer = NUM_HOUSES/ NUM_PLAYERS;
         int startI = currentPlayerNum   * numHousesPerPlayer;
         int endI = (currentPlayerNum+1) * numHousesPerPlayer;
 
@@ -119,11 +117,11 @@ public class Board {
 
     /* Move all remaining seeds into the respective players' stores */
     public void gameEndTallying() {
-        int numHousesPerPlayer = NUM_HOUSES/NUM_STORES;
+        int numHousesPerPlayer = NUM_HOUSES/ NUM_PLAYERS;
         int startI, endI;
         int numSeeds;
 
-        for (int j = 0; j < NUM_STORES; j++) {
+        for (int j = 0; j < NUM_PLAYERS; j++) {
             startI = j   * numHousesPerPlayer;
             endI = (j+1) * numHousesPerPlayer;
 
@@ -135,56 +133,48 @@ public class Board {
         }
     }
 
-    // TODO: Fix naming convention / inconsistencies between houseNum vs houseI, etc.
+    // NOTE: Wrapped in methods to reduce syntactic dependencies if changing data structure
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private int readHouseSeeds(int houseNum) {
-        return houses[houseNum].getNumSeeds();
+    private int readHouseSeeds(int houseI) {
+        return houses[houseI].getNumSeeds();
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private int readStoreSeeds(int playerNum) {
-        return stores[playerNum].getNumSeeds();
+    private int readStoreSeeds(int playerI) {
+        return stores[playerI].getNumSeeds();
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void writeHouseSeeds(int houseNum, int seedNum) {
-        houses[houseNum].setNumSeeds(seedNum);
+    private void writeHouseSeeds(int houseI, int seedNum) {
+        houses[houseI].setNumSeeds(seedNum);
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void writeStoreSeeds(int playerNum, int seedNum) {
-        stores[playerNum].setNumSeeds(seedNum);
+    private void writeStoreSeeds(int playerI, int seedNum) {
+        stores[playerI].setNumSeeds(seedNum);
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void addHouseSeeds(int houseNum) {
-        addHouseSeeds(houseNum, 1);
+    private void addHouseSeeds(int houseI) {
+        addHouseSeeds(houseI, 1);
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void addHouseSeeds(int houseNum, int numToAdd) {
-        writeHouseSeeds(houseNum, readHouseSeeds(houseNum)+numToAdd);
+    private void addHouseSeeds(int houseI, int numToAdd) {
+        writeHouseSeeds(houseI, readHouseSeeds(houseI)+numToAdd);
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void addStoreSeeds(int playerNum) {
-        addStoreSeeds(playerNum, 1);
+    private void addStoreSeeds(int playerI) {
+        addStoreSeeds(playerI, 1);
     }
 
-    // NOTE: Wrapped in a method to reduce syntactic dependencies when changing data structure used
-    private void addStoreSeeds(int playerNum, int numToAdd) {
-        writeStoreSeeds(playerNum, readStoreSeeds(playerNum)+numToAdd);
+    private void addStoreSeeds(int playerI, int numToAdd) {
+        writeStoreSeeds(playerI, readStoreSeeds(playerI)+numToAdd);
     }
 
     private void toggleCurrentPlayer() {
-        currentPlayerNum = (currentPlayerNum+1) % NUM_STORES;
+        currentPlayerNum = (currentPlayerNum+1) % NUM_PLAYERS;
     }
 
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
     private int houseNumToArrayIndex(int playerNum, int houseNum) {
         if (playerNum < 0 || playerNum > 1 || houseNum < 0 || houseNum > 5) { return -1; }
-        return houseNum + playerNum*(NUM_HOUSES/NUM_STORES);
+        return houseNum + playerNum*(NUM_HOUSES/ NUM_PLAYERS);
     }
 
     private void attemptCapture(int currentHouseI) {
@@ -203,31 +193,20 @@ public class Board {
 
     /* Calculates the index of the house that is opposite to this one */
     private int findOppositeArrayIndex(int i) {
-        int min = 0;
         int max = NUM_HOUSES-1;
-        int diff;
-        int result;
-        if (i < NUM_HOUSES/NUM_STORES) {
-            diff = i - min;
-            result = max - diff;
-        } else {
-            diff = max - i;
-            result = min + diff;
-        }
-        // TODO: Check the above is correct and check if it can be simplified (by running just the first part)
-        return result;
+        return (max - i);
     }
 
     private boolean indexBelongsToPlayer(int arrayIndex) {
-        return (currentPlayerNum==0)&&(arrayIndex < NUM_HOUSES/NUM_STORES)
-                || (currentPlayerNum==1)&&(arrayIndex >= NUM_HOUSES/NUM_STORES);
+        return (currentPlayerNum==0)&&(arrayIndex < NUM_HOUSES/ NUM_PLAYERS)
+                || (currentPlayerNum==1)&&(arrayIndex >= NUM_HOUSES/ NUM_PLAYERS);
     }
 
-    private void captureOpposite(int houseNumToCapture) {
-        int numSeeds = readHouseSeeds(houseNumToCapture);
+    private void captureOpposite(int houseIToCapture) {
+        int numSeeds = readHouseSeeds(houseIToCapture);
 
         // Capture the opposite house
-        writeHouseSeeds(houseNumToCapture, 0);
+        writeHouseSeeds(houseIToCapture, 0);
         addStoreSeeds(currentPlayerNum, numSeeds);
     }
 }

@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GameHandler {
-    private final int NUM_PLAYERS = Settings.NUM_PLAYERS;
-    private final int NUM_HOUSES = Settings.NUM_HOUSES;
-
     private IOHandler ioHandler;
     private Board board;
 
@@ -49,7 +46,7 @@ public class GameHandler {
 
                 // Process the input and update the game's state
                 int houseNum = inputToInt(userInput);
-                if (houseNum < 0 || houseNum > NUM_HOUSES /2) {
+                if (houseNum < 0 || houseNum > Settings.NUM_HOUSES /2) {
                     ioHandler.printInvalidInput();
                     continue;
                 }
@@ -79,7 +76,7 @@ public class GameHandler {
         // Format P2 Houses
         playerIndex = 1;
         playerNums.add(playerIndex+1);
-        for (int i = 0; i < NUM_HOUSES /2; i++) {
+        for (int i = 0; i < Settings.NUM_HOUSES /2; i++) {
             numSeeds = board.getHouseSeeds(playerIndex, i);
             seedsL1.add(numSeeds);
         }
@@ -96,7 +93,7 @@ public class GameHandler {
 
         // Format P1 Houses
         playerIndex = 0;
-        for (int i = 0; i < NUM_HOUSES /2; i++) {
+        for (int i = 0; i < Settings.NUM_HOUSES /2; i++) {
             numSeeds = board.getHouseSeeds(playerIndex, i);
             seedsL2.add(numSeeds);
         }
@@ -132,7 +129,7 @@ public class GameHandler {
         int newScore;
         ArrayList<Integer> scores = new ArrayList<Integer>();
 
-        for (int i = 0; i < NUM_PLAYERS; i++) {
+        for (int i = 0; i < Settings.NUM_PLAYERS; i++) {
             newScore = board.getStoreSeeds(i);
             ioHandler.printPlayerScore(i, newScore);
             scores.add(newScore);

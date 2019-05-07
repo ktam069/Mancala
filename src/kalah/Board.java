@@ -5,23 +5,24 @@ import java.util.List;
 
 public class Board {
     // Note that houses are indexed anticlockwise starting from house one of player one
+    // TODO
+//    private List<Pit> pits = new ArrayList<Pit>();
+
+    // TODO: manage pits by using their owners
+
     private List<Pit> houses = new ArrayList<Pit>();
     private List<Pit> stores = new ArrayList<Pit>();
-
-    private final int NUM_HOUSES = Settings.NUM_HOUSES;
-    private final int NUM_PLAYERS = Settings.NUM_PLAYERS;
-
-    // TODO: Create players
 
     // The player number whose turn it is (should be either 0 or 1 if there are two players)
     private int currentPlayerNum = 0;
 
     public Board() {
-        for (int i = 0; i < NUM_HOUSES; i++) {
-            houses.add(new House());
-        }
-        for (int i = 0; i < NUM_PLAYERS; i++) {
-            stores.add(new Store());
+        for (int playerI = 0; playerI < Settings.NUM_PLAYERS; playerI++) {
+            // Create houses and stores for each player
+            for (int j = 0; j < Settings.NUM_HOUSES_PER_PLAYER; j++) {
+                houses.add(new House(playerI));
+            }
+            stores.add(new Store(playerI));
         }
     }
 
@@ -34,13 +35,13 @@ public class Board {
 
         // Distribute the removed seeds over the board
         while (numSeeds > 0) {
-            houseI = (houseI + 1) % NUM_HOUSES;
+            houseI = (houseI + 1) % Settings.NUM_HOUSES;
 
             if (houseI == 0) {
                 // Reached the player 2's store
                 if (currentPlayerNum == 0) {
                     addHouseSeeds(houseI);
-                    if (numSeeds==1) { attemptCapture(houseI); }
+                    attemptCapture(houseI, numSeeds);
                 } else {
                     addStoreSeeds(currentPlayerNum);
                     numSeeds--;
@@ -52,13 +53,13 @@ public class Board {
                     }
 
                     addHouseSeeds(houseI);
-                    if (numSeeds==1) { attemptCapture(houseI); }
+                    attemptCapture(houseI, numSeeds);
                 }
-            } else if (houseI == NUM_HOUSES/ NUM_PLAYERS) {
+            } else if (houseI == Settings.NUM_HOUSES / Settings.NUM_PLAYERS) {
                 // Reached the player 1's store
                 if (currentPlayerNum == 1) {
                     addHouseSeeds(houseI);
-                    if (numSeeds==1) { attemptCapture(houseI); }
+                    attemptCapture(houseI, numSeeds);
                 } else {
                     addStoreSeeds(currentPlayerNum);
                     numSeeds--;
@@ -70,11 +71,11 @@ public class Board {
                     }
 
                     addHouseSeeds(houseI);
-                    if (numSeeds==1) { attemptCapture(houseI); }
+                    attemptCapture(houseI, numSeeds);
                 }
             } else {
                 addHouseSeeds(houseI);
-                if (numSeeds==1) { attemptCapture(houseI); }
+                attemptCapture(houseI, numSeeds);
             }
 
             numSeeds--;
@@ -103,7 +104,7 @@ public class Board {
 
     /* Checks if the current player has any seeds in houses */
     public boolean housesEmpty() {
-        int numHousesPerPlayer = NUM_HOUSES/ NUM_PLAYERS;
+        int numHousesPerPlayer = Settings.NUM_HOUSES/ Settings.NUM_PLAYERS;
         int startI = currentPlayerNum   * numHousesPerPlayer;
         int endI = (currentPlayerNum+1) * numHousesPerPlayer;
 
@@ -117,11 +118,11 @@ public class Board {
 
     /* Move all remaining seeds into the respective players' stores */
     public void gameEndTallying() {
-        int numHousesPerPlayer = NUM_HOUSES/ NUM_PLAYERS;
+        int numHousesPerPlayer = Settings.NUM_HOUSES / Settings.NUM_PLAYERS;
         int startI, endI;
         int numSeeds;
 
-        for (int j = 0; j < NUM_PLAYERS; j++) {
+        for (int j = 0; j < Settings.NUM_PLAYERS; j++) {
             startI = j   * numHousesPerPlayer;
             endI = (j+1) * numHousesPerPlayer;
 
@@ -168,16 +169,18 @@ public class Board {
     }
 
     private void toggleCurrentPlayer() {
-        currentPlayerNum = (currentPlayerNum+1) % NUM_PLAYERS;
+        currentPlayerNum = (currentPlayerNum+1) % Settings.NUM_PLAYERS;
     }
 
     /* Assumes playerNum is either 0 or 1, and houseNum is in the range 0 to 5 (inclusive) */
     private int houseNumToArrayIndex(int playerNum, int houseNum) {
         if (playerNum < 0 || playerNum > 1 || houseNum < 0 || houseNum > 5) { return -1; }
-        return houseNum + playerNum*(NUM_HOUSES/ NUM_PLAYERS);
+        return houseNum + playerNum*(Settings.NUM_HOUSES/ Settings.NUM_PLAYERS);
     }
 
-    private void attemptCapture(int currentHouseI) {
+    private void attemptCapture(int currentHouseI, int numSeedsToSow) {
+        if (numSeedsToSow != 1) { return; }
+        
         int oppositeHouseI = findOppositeArrayIndex(currentHouseI);
 
         if (readHouseSeeds(currentHouseI) == 1 && indexBelongsToPlayer(currentHouseI)) {
@@ -193,13 +196,13 @@ public class Board {
 
     /* Calculates the index of the house that is opposite to this one */
     private int findOppositeArrayIndex(int i) {
-        int max = NUM_HOUSES-1;
+        int max = Settings.NUM_HOUSES - 1;
         return (max - i);
     }
 
     private boolean indexBelongsToPlayer(int arrayIndex) {
-        return (currentPlayerNum==0)&&(arrayIndex < NUM_HOUSES/ NUM_PLAYERS)
-                || (currentPlayerNum==1)&&(arrayIndex >= NUM_HOUSES/ NUM_PLAYERS);
+        return (currentPlayerNum==0)&&(arrayIndex < Settings.NUM_HOUSES/ Settings.NUM_PLAYERS)
+                || (currentPlayerNum==1)&&(arrayIndex >= Settings.NUM_HOUSES/ Settings.NUM_PLAYERS);
     }
 
     private void captureOpposite(int houseIToCapture) {

@@ -23,44 +23,49 @@ public class IOHandler {
         String lineToPrint;
         int numSeeds;
 
-        io.println("+----+-------+-------+-------+-------+-------+-------+----+");
-
-        // Format P2 Houses
-        lineToPrint = "| P"+playerNums.get(0)+" | ";
-        for (int i = seedsL1.size()-1; i >= 0 ; i--) {
-            numSeeds = seedsL1.get(i);
-            lineToPrint += (i+1)+"[";
-            if (numSeeds < 10) { lineToPrint += " "; }
-            lineToPrint += numSeeds+"] | ";
-        }
-
-        // Format P1 Store
-        numSeeds = storeSeeds.get(0);
-        if (numSeeds < 10) { lineToPrint += " "; }
-        lineToPrint += numSeeds+" |";
-
-        io.println(lineToPrint);
-
-        io.println("|    |-------+-------+-------+-------+-------+-------|    |");
+        io.println("+---------------+");
 
         // Format P2 Store
-        lineToPrint = "|";
+        lineToPrint = "|       | P"+playerNums.get(0);
         numSeeds = storeSeeds.get(1);
         if (numSeeds < 10) { lineToPrint += " "; }
-        lineToPrint += " "+numSeeds+" | ";
-
-        // Format P1 Houses
-        for (int i = 0; i < seedsL2.size(); i++) {
-            numSeeds = seedsL2.get(i);
-            lineToPrint += (i+1)+"[";
-            if (numSeeds < 10) { lineToPrint += " "; }
-            lineToPrint += numSeeds+"] | ";
-        }
-        lineToPrint += "P"+playerNums.get(1)+" |";
+        lineToPrint += " "+numSeeds+" |";
 
         io.println(lineToPrint);
 
-        io.println("+----+-------+-------+-------+-------+-------+-------+----+");
+        io.println("+-------+-------+");
+
+        int maxIndex = seedsL1.size() - 1;
+        int j;
+
+        // Format Houses
+        for (int i = 0; i < seedsL1.size(); i++) {
+            numSeeds = seedsL2.get(i);
+            lineToPrint = "| " +(i+1)+"[";
+            if (numSeeds < 10) { lineToPrint += " "; }
+            lineToPrint += numSeeds+"] | ";
+
+            j = maxIndex - i;
+
+            numSeeds = seedsL1.get(j);
+            lineToPrint += (j+1)+"[";
+            if (numSeeds < 10) { lineToPrint += " "; }
+            lineToPrint += numSeeds+"] |";
+
+            io.println(lineToPrint);
+        }
+
+        io.println("+-------+-------+");
+
+        // Format P1 Store
+        lineToPrint = "| P"+playerNums.get(1);
+        numSeeds = storeSeeds.get(0);
+        if (numSeeds < 10) { lineToPrint += " "; }
+        lineToPrint += " "+numSeeds+" |       |";
+
+        io.println(lineToPrint);
+
+        io.println("+---------------+");
     }
 
     public String getUserInput(int playerNum) {

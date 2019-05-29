@@ -11,5 +11,7 @@ public class Settings {
     public static final int INIT_NUM_HOUSE_SEEDS = 4;
     public static final int INIT_NUM_STORE_SEEDS = 0;
 
+    public static final int DEFAULT_SEED_VALUE = 1;
+
     public static final int STARTING_PLAYER_INDEX =  0;
 }

@@ -6,5 +6,6 @@
 #!IO.html
 !junit-3.8.2.jar
 !kalah.jar
+!kalah-vertical.jar
 !test_specifications
 !test_specifications/*

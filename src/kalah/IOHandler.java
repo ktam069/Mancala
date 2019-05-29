@@ -21,43 +21,27 @@ public class IOHandler {
 
     public void printGameState(List<Integer> seedsL1, List<Integer> seedsL2, List<Integer> playerNums, List<Integer> storeSeeds) {
         String lineToPrint;
-        int numSeeds;
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");
 
         // Format P2 Houses
-        lineToPrint = "| P"+playerNums.get(0)+" | ";
+        lineToPrint = "| P"+playerNums.get(0)+" |";
         for (int i = seedsL1.size()-1; i >= 0 ; i--) {
-            numSeeds = seedsL1.get(i);
-            lineToPrint += (i+1)+"[";
-            if (numSeeds < 10) { lineToPrint += " "; }
-            lineToPrint += numSeeds+"] | ";
+            lineToPrint += String.format("%2d[%2d] |", i+1, seedsL1.get(i));
         }
-
         // Format P1 Store
-        numSeeds = storeSeeds.get(0);
-        if (numSeeds < 10) { lineToPrint += " "; }
-        lineToPrint += numSeeds+" |";
-
+        lineToPrint += String.format(" %2d |", storeSeeds.get(0));
         io.println(lineToPrint);
 
         io.println("|    |-------+-------+-------+-------+-------+-------|    |");
 
         // Format P2 Store
-        lineToPrint = "|";
-        numSeeds = storeSeeds.get(1);
-        if (numSeeds < 10) { lineToPrint += " "; }
-        lineToPrint += " "+numSeeds+" | ";
-
+        lineToPrint = String.format("| %2d |", storeSeeds.get(1));
         // Format P1 Houses
         for (int i = 0; i < seedsL2.size(); i++) {
-            numSeeds = seedsL2.get(i);
-            lineToPrint += (i+1)+"[";
-            if (numSeeds < 10) { lineToPrint += " "; }
-            lineToPrint += numSeeds+"] | ";
+            lineToPrint += String.format("%2d[%2d] |", i+1, seedsL2.get(i));
         }
-        lineToPrint += "P"+playerNums.get(1)+" |";
-
+        lineToPrint += " P"+playerNums.get(1)+" |";
         io.println(lineToPrint);
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");

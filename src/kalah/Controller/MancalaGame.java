@@ -1,8 +1,8 @@
-package kalah;
+package kalah.Controller;
 
-import kalah.IOConsole;
-import kalah.Board;
+import kalah.Model.Board;
 import kalah.Settings;
+import kalah.View.IOConsole;
 
 import java.util.ArrayList;
 import java.util.Collections;

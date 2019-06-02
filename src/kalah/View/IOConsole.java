@@ -1,4 +1,4 @@
-package kalah;
+package kalah.View;
 
 import com.qualitascorpus.testsupport.IO;
 

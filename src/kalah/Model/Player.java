@@ -1,4 +1,6 @@
-package kalah;
+package kalah.Model;
+
+import kalah.Settings;
 
 import java.util.ArrayList;
 import java.util.List;

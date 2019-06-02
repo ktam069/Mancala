@@ -1,4 +1,6 @@
-package kalah;
+package kalah.Model;
+
+import kalah.Settings;
 
 public class Store extends Pit {
     public Store() {

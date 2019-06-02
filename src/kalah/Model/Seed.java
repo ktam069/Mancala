@@ -1,4 +1,4 @@
-package kalah;
+package kalah.Model;
 
 import kalah.Settings;
 

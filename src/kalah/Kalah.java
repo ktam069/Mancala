@@ -2,6 +2,8 @@ package kalah;
 
 import com.qualitascorpus.testsupport.IO;
 import com.qualitascorpus.testsupport.MockIO;
+import kalah.Controller.MancalaGame;
+import kalah.View.IOConsole;
 
 /**
  * This class is the starting point for a Kalah implementation using

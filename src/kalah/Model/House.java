@@ -1,4 +1,6 @@
-package kalah;
+package kalah.Model;
+
+import kalah.Settings;
 
 public class House extends Pit {
     public House() {

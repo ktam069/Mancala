@@ -1,17 +1,19 @@
 package kalah;
 
+import kalah.Settings;
+
 public class Seed {
-    private int value;
+    protected int seedValue;
 
     public Seed() {
-        this.value = Settings.DEFAULT_SEED_VALUE;
+        this.seedValue = Settings.DEFAULT_SEED_VALUE;
     }
 
     public Seed(int seedValue) {
-        this.value = seedValue;
+        this.seedValue = seedValue;
     }
 
     public int getSeedValue() {
-        return this.value;
+        return this.seedValue;
     }
 }

@@ -4,10 +4,10 @@ import com.qualitascorpus.testsupport.IO;
 
 import java.util.List;
 
-public class IOHandler {
+public class IOConsole {
     private IO io;
 
-    public IOHandler(IO io) {
+    public IOConsole(IO io) {
         this.io = io;
     }
 
@@ -55,6 +55,7 @@ public class IOHandler {
     }
 
     public boolean isInputToQuit(String userInput) {
+        if (userInput == null) { return false; }
         return userInput.equals("q");
     }
 

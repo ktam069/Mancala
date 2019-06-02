@@ -14,13 +14,13 @@ public class Kalah {
 	}
 
 	public void play(IO io) {
-		// Start Input/Output Handler
-		IOHandler ioHandler = new IOHandler(io);
+		// Start input/output console (for i/o handling)
+		IOConsole ioConsole = new IOConsole(io);
 
-		// Start Game Handler, which accepts an IOHandler for 'view' handling
-		GameHandler gameHandler = new GameHandler(ioHandler);
+		// Start Game Handler, which accepts an IOConsole for handling of the view
+		MancalaGame mancalaGame = new MancalaGame(ioConsole);
 
 		// Start the game: this will run forever until the game is quit
-		gameHandler.run();
+		mancalaGame.run();
 	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Pit {
-    private List<Seed> seeds;
-    private int playerIndex = -1;
+    protected List<Seed> seeds;
+    protected int playerIndex = -1;
 
     public Pit(int numSeeds) {
         this.seeds = new ArrayList<Seed>();

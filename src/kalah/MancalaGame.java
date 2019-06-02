@@ -1,15 +1,19 @@
 package kalah;
 
+import kalah.IOConsole;
+import kalah.Board;
+import kalah.Settings;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameHandler {
-    private IOHandler ioHandler;
+public class MancalaGame {
+    private IOConsole ioConsole;
     private Board board;
 
-    public GameHandler(IOHandler ioHandler) {
-        this.ioHandler = ioHandler;
+    public MancalaGame(IOConsole ioConsole) {
+        this.ioConsole = ioConsole;
 
         // Create a game board, instantiating the board
         this.board = new Board();
@@ -38,7 +42,7 @@ public class GameHandler {
                 String userInput = getInput();
 
                 // Terminate the program upon the input of 'q'
-                if (ioHandler.isInputToQuit(userInput)) {
+                if (ioConsole.isInputToQuit(userInput)) {
                     printGameOver();
                     gameEnded = true;
                     break;
@@ -47,11 +51,11 @@ public class GameHandler {
                 // Process the input and update the game's state
                 int houseNum = inputToInt(userInput);
                 if (houseNum < 0 || houseNum > Settings.NUM_HOUSES/2-1) {
-                    ioHandler.printInvalidInput();
+                    ioConsole.printInvalidInput();
                     continue;
                 }
                 if (board.getHouseSeeds(board.getPlayerI(), houseNum) < 1) {
-                    ioHandler.printInvalidMove();
+                    ioConsole.printInvalidMove();
                     continue;
                 }
                 board.processMove(houseNum);
@@ -80,8 +84,8 @@ public class GameHandler {
             getSeedsAsList(seedLines.get(i), playerNums, storeSeeds, i);
         }
 
-        // Print the game state using the IOHandler
-        ioHandler.printGameState(seedLines.get(0), seedLines.get(1), playerNums, storeSeeds);
+        // Print the game state using the IOConsole
+        ioConsole.printGameState(seedLines.get(0), seedLines.get(1), playerNums, storeSeeds);
     }
 
     private void getSeedsAsList(List<Integer> list, List<Integer> playerNums, List<Integer> storeSeeds, int playerI) {
@@ -104,7 +108,7 @@ public class GameHandler {
     private String getInput() {
         int playerNum = board.getPlayerI() + 1;
 
-        return ioHandler.getUserInput(playerNum);
+        return ioConsole.getUserInput(playerNum);
     }
 
     private int inputToInt(String input) {
@@ -116,7 +120,7 @@ public class GameHandler {
     }
 
     private void printGameOver() {
-        ioHandler.printGameOver();
+        ioConsole.printGameOver();
         printGameState();
     }
 
@@ -129,7 +133,7 @@ public class GameHandler {
 
         for (int i = 0; i < Settings.NUM_PLAYERS; i++) {
             newScore = board.getStoreSeeds(i);
-            ioHandler.printPlayerScore(i, newScore);
+            ioConsole.printPlayerScore(i, newScore);
             scores.add(newScore);
         }
 
@@ -138,9 +142,9 @@ public class GameHandler {
 
         // Determine result based on whether there are more than one player with max score
         if (winnerI == scores.lastIndexOf(maxScore)) {
-            ioHandler.printPlayerWon(winnerI);
+            ioConsole.printPlayerWon(winnerI);
         } else {
-            ioHandler.printGameTied();
+            ioConsole.printGameTied();
         }
 
     }

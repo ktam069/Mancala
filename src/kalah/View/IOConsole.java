@@ -1,6 +1,7 @@
 package kalah.View;
 
 import com.qualitascorpus.testsupport.IO;
+import kalah.Settings;
 
 import java.util.List;
 
@@ -19,32 +20,46 @@ public class IOConsole {
         io.println("House is empty. Move again.");
     }
 
-    public void printGameState(List<Integer> seedsL1, List<Integer> seedsL2, List<Integer> playerNums, List<Integer> storeSeeds) {
+    public void printGameState(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
         String lineToPrint;
+        int playerI = 0;
+        List<Integer> houseSeeds;
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");
 
         // Format P2 Houses
-        lineToPrint = "| P"+playerNums.get(0)+" |";
-        for (int i = seedsL1.size()-1; i >= 0 ; i--) {
-            lineToPrint += String.format("%2d[%2d] |", i+1, seedsL1.get(i));
+        playerI = nextPlayerIndex(playerI);
+        lineToPrint = "| P"+(playerI+1)+" |";
+        houseSeeds = houseSeedsList.get(playerI);
+        for (int i = houseSeeds.size()-1; i >= 0 ; i--) {
+            lineToPrint += String.format("%2d[%2d] |", i+1, houseSeeds.get(i));
         }
+
         // Format P1 Store
-        lineToPrint += String.format(" %2d |", storeSeeds.get(0));
+        playerI = nextPlayerIndex(playerI);
+        lineToPrint += String.format(" %2d |", storeSeeds.get(playerI));
         io.println(lineToPrint);
 
         io.println("|    |-------+-------+-------+-------+-------+-------|    |");
 
         // Format P2 Store
+        playerI = nextPlayerIndex(playerI);
         lineToPrint = String.format("| %2d |", storeSeeds.get(1));
+
         // Format P1 Houses
-        for (int i = 0; i < seedsL2.size(); i++) {
-            lineToPrint += String.format("%2d[%2d] |", i+1, seedsL2.get(i));
+        playerI = nextPlayerIndex(playerI);
+        houseSeeds = houseSeedsList.get(playerI);
+        for (int i = 0; i < houseSeeds.size(); i++) {
+            lineToPrint += String.format("%2d[%2d] |", i+1, houseSeeds.get(i));
         }
-        lineToPrint += " P"+playerNums.get(1)+" |";
+        lineToPrint += " P"+(playerI+1)+" |";
         io.println(lineToPrint);
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");
+    }
+
+    private int nextPlayerIndex(int playerI) {
+        return (playerI+1) % Settings.NUM_PLAYERS;
     }
 
     public String getUserInput(int playerNum) {

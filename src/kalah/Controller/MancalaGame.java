@@ -68,41 +68,33 @@ public class MancalaGame {
     }
 
     private void printGameState() {
-        int numSeeds;
-        int playerIndex;
-
-        List<Integer> seedsL1 = new ArrayList<Integer>();
-        List<Integer> seedsL2 = new ArrayList<Integer>();
-        List<Integer> playerNums = new ArrayList<Integer>();
         List<Integer> storeSeeds = new ArrayList<Integer>();
-
-        List<List<Integer>> seedLines = new ArrayList<List<Integer>>();
-        seedLines.add(seedsL1);
-        seedLines.add(seedsL2);
+        List<List<Integer>> houseSeedsList = new ArrayList<List<Integer>>();
 
         for (int i = 0; i < Settings.NUM_PLAYERS; i++) {
-            getSeedsAsList(seedLines.get(i), playerNums, storeSeeds, i);
+            List<Integer> houseSeeds = new ArrayList<Integer>();
+            houseSeedsList.add(houseSeeds);
+
+            // Get the seed numbers for the houses and stores of each player
+            getSeedsAsList(storeSeeds, houseSeedsList.get(i), i);
         }
 
         // Print the game state using the IOConsole
-        ioConsole.printGameState(seedLines.get(0), seedLines.get(1), playerNums, storeSeeds);
+        ioConsole.printGameState(storeSeeds, houseSeedsList);
     }
 
-    private void getSeedsAsList(List<Integer> list, List<Integer> playerNums, List<Integer> storeSeeds, int playerI) {
+    private void getSeedsAsList(List<Integer> storeSeeds, List<Integer> houseSeedsList, int playerI) {
         int numSeeds;
 
-        // Format the opponent's houses first
-        playerI = (playerI+1) % Settings.NUM_PLAYERS;
-        for (int i = 0; i < Settings.NUM_HOUSES/2; i++) {
-            numSeeds = board.getHouseSeeds(playerI, i);
-            list.add(numSeeds);
-        }
-        playerNums.add(playerI+1);
-
-        // Format the current player's store
-        playerI = (playerI+1) % Settings.NUM_PLAYERS;
+        // Format the player's store
         numSeeds = board.getStoreSeeds(playerI);
         storeSeeds.add(numSeeds);
+
+        // Format the player's houses
+        for (int i = 0; i < Settings.NUM_HOUSES_PER_PLAYER; i++) {
+            numSeeds = board.getHouseSeeds(playerI, i);
+            houseSeedsList.add(numSeeds);
+        }
     }
 
     private String getInput() {

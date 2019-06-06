@@ -1,22 +1,21 @@
 package kalah.Controller;
 
-import kalah.Model.Board;
+import kalah.Model.ModelInterface;
 import kalah.Settings;
-import kalah.View.IOConsole;
+import kalah.View.ViewInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MancalaGame {
-    private IOConsole ioConsole;
-    private Board board;
+    private ViewInterface ioConsole;
+    private ModelInterface board;
 
-    public MancalaGame(IOConsole ioConsole) {
-        this.ioConsole = ioConsole;
-
-        // Create a game board, instantiating the board
-        this.board = new Board();
+    public MancalaGame(ViewInterface view, ModelInterface model) {
+        // Use the concrete view and model (that implement the abstract interfaces)
+        this.ioConsole = view;
+        this.board = model;
     }
 
     public void run() {
@@ -123,6 +122,7 @@ public class MancalaGame {
         int newScore;
         ArrayList<Integer> scores = new ArrayList<Integer>();
 
+        // Get an ArrayList of the players' final scores
         for (int i = 0; i < Settings.NUM_PLAYERS; i++) {
             newScore = board.getStoreSeeds(i);
             ioConsole.printPlayerScore(i, newScore);

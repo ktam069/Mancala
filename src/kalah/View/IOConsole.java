@@ -24,11 +24,22 @@ public class IOConsole implements ViewInterface {
 
     @Override
     public void printGameState(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
-        String lineToPrint;
-        int playerI = 0;
-        List<Integer> houseSeeds;
+        String lineToPrint1, lineToPrint2;
+
+        lineToPrint1 = formatLine1(storeSeeds, houseSeedsList);
+        lineToPrint2 = formatLine2(storeSeeds, houseSeedsList);
 
         io.println("+----+-------+-------+-------+-------+-------+-------+----+");
+        io.println(lineToPrint1);
+        io.println("|    |-------+-------+-------+-------+-------+-------|    |");
+        io.println(lineToPrint2);
+        io.println("+----+-------+-------+-------+-------+-------+-------+----+");
+    }
+
+    private String formatLine1(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
+        String lineToPrint;
+        List<Integer> houseSeeds;
+        int playerI = 0;
 
         // Format P2 Houses
         playerI = nextPlayerIndex(playerI);
@@ -41,9 +52,14 @@ public class IOConsole implements ViewInterface {
         // Format P1 Store
         playerI = nextPlayerIndex(playerI);
         lineToPrint += String.format(" %2d |", storeSeeds.get(playerI));
-        io.println(lineToPrint);
 
-        io.println("|    |-------+-------+-------+-------+-------+-------|    |");
+        return lineToPrint;
+    }
+
+    private String formatLine2(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
+        String lineToPrint;
+        List<Integer> houseSeeds;
+        int playerI = 0;
 
         // Format P2 Store
         playerI = nextPlayerIndex(playerI);
@@ -56,9 +72,8 @@ public class IOConsole implements ViewInterface {
             lineToPrint += String.format("%2d[%2d] |", i+1, houseSeeds.get(i));
         }
         lineToPrint += " P"+(playerI+1)+" |";
-        io.println(lineToPrint);
 
-        io.println("+----+-------+-------+-------+-------+-------+-------+----+");
+        return lineToPrint;
     }
 
     private int nextPlayerIndex(int playerI) {

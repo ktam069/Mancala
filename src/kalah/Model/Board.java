@@ -50,6 +50,14 @@ public class Board {
         toggleCurrentPlayer();
     }
 
+    private void toggleCurrentPlayer() {
+        currentPlayerI = nextPlayerIndex(currentPlayerI);
+    }
+
+    private int nextPlayerIndex(int playerI) {
+        return (playerI+1) % Settings.NUM_PLAYERS;
+    }
+
     /* Returns the array index for which player's turn it is (ranges from 0 to NUM_PLAYERS-1) */
     public int getPlayerI() {
         return currentPlayerI;
@@ -98,14 +106,6 @@ public class Board {
         }
     }
 
-    private void toggleCurrentPlayer() {
-        currentPlayerI = nextPlayerIndex(currentPlayerI);
-    }
-
-    private int nextPlayerIndex(int playerI) {
-        return (playerI+1) % Settings.NUM_PLAYERS;
-    }
-
     private void attemptCapture(SeedSower seedSower, int numSeedsToSow) {
         if (numSeedsToSow != 1) { return; }
 
@@ -120,8 +120,10 @@ public class Board {
         int houseSeedCount = houseOwner.getHouseSeedCount(currentHouseI);
         int oppositeSeedCount = nextPlayer.getHouseSeedCount(oppositeHouseI);
 
+        // Nothing to capture
         if (oppositeSeedCount == 0) { return; }
 
+        // Perform capture if the last seed is sown on the player's own houses
         if (houseSeedCount == 1 && (currentPlayerI == houseOwnerI)) {
             // Capture the seeds from the opposite house
             int numSeeds = nextPlayer.getHouseSeedCount(oppositeHouseI);

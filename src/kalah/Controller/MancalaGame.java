@@ -23,7 +23,7 @@ public class MancalaGame {
         boolean moveMade;
         boolean gameEnded = false;
 
-        // Runs the game forever until the game is quit with 'q'
+        // Runs the game forever until the game is quit
         while(true) {
             moveMade = false;
 
@@ -49,16 +49,16 @@ public class MancalaGame {
                 }
 
                 // Process the input and update the game's state
-                int houseNum = inputToInt(userInput);
-                if (houseNum < 0 || houseNum > Settings.NUM_HOUSES/2-1) {
+                int houseIndex = inputToInt(userInput) - 1;
+                if (houseIndex < 0 || houseIndex > Settings.NUM_HOUSES_PER_PLAYER-1) {
                     ioConsole.printInvalidInput();
                     continue;
                 }
-                if (board.getHouseSeeds(board.getPlayerI(), houseNum) < 1) {
+                if (board.getHouseSeeds(board.getPlayerI(), houseIndex) < 1) {
                     ioConsole.printInvalidMove();
                     continue;
                 }
-                board.processMove(houseNum);
+                board.processMove(houseIndex);
 
                 moveMade = true;
             }
@@ -105,7 +105,7 @@ public class MancalaGame {
 
     private int inputToInt(String input) {
         try {
-            return ( Integer.parseInt(input) - 1 );
+            return ( Integer.parseInt(input) );
         } catch(Exception e) {
             return -1;
         }

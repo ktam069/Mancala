@@ -5,7 +5,7 @@ import kalah.Settings;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements ModelInterface {
+public class Board {
     private List<Pit> pits = new ArrayList<Pit>();
 
     // The player index whose turn it is
@@ -21,7 +21,6 @@ public class Board implements ModelInterface {
         }
     }
 
-    @Override
     public void processMove(int houseNum) {
         int pitI = findHouseArrayIndex(currentPlayerI, houseNum);
         int numSeeds = readHouseSeeds(pitI);
@@ -59,13 +58,11 @@ public class Board implements ModelInterface {
     }
 
     /* Returns the array index for which player's turn it is (ranges from 0 to NUM_PLAYERS-1) */
-    @Override
     public int getPlayerI() {
         return currentPlayerI;
     }
 
     /* Assumes playerI is from 0 to NUM_PLAYERS-1, and houseI is in the range 0 to NUM_HOUSES_PER_PLAYER-1 */
-    @Override
     public int getHouseSeeds(int playerI, int houseI) {
         if (playerI < 0 || playerI > Settings.NUM_PLAYERS-1 || houseI < 0 || houseI > Settings.NUM_HOUSES_PER_PLAYER-1) {
             return -1;
@@ -75,14 +72,12 @@ public class Board implements ModelInterface {
     }
 
     /* Assumes playerI is from 0 to NUM_PLAYERS-1 */
-    @Override
     public int getStoreSeeds(int playerI) {
         if (playerI < 0 || playerI > Settings.NUM_PLAYERS-1) { return -1; }
         return readStoreSeeds(playerI);
     }
 
     /* Checks if the current player has any seeds in houses */
-    @Override
     public boolean housesEmpty() {
         int startI = currentPlayerI * Settings.NUM_PITS_PER_SIDE;
         int endI = (currentPlayerI+1) * Settings.NUM_PITS_PER_SIDE - 1;
@@ -96,7 +91,6 @@ public class Board implements ModelInterface {
     }
 
     /* Move all remaining seeds into the respective players' stores */
-    @Override
     public void gameEndTallying() {
         int startI, endI;
         int numSeeds;

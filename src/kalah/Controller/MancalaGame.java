@@ -1,22 +1,21 @@
 package kalah.Controller;
 
-import kalah.Model.Board;
+import kalah.Model.ModelInterface;
 import kalah.Settings;
-import kalah.View.IOConsole;
+import kalah.View.ViewInterface;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MancalaGame {
-    private IOConsole ioConsole;
-    private Board board;
+    private ViewInterface ioConsole;
+    private ModelInterface board;
 
-    public MancalaGame(IOConsole ioConsole) {
-        this.ioConsole = ioConsole;
-
-        // Create a game board, instantiating the board
-        this.board = new Board();
+    public MancalaGame(ViewInterface view, ModelInterface model) {
+        // Use the concrete view and model (that implement the abstract interfaces)
+        this.ioConsole = view;
+        this.board = model;
     }
 
     public void run() {

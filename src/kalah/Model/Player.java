@@ -33,7 +33,31 @@ public class Player {
         return pits.get(houseIndex).getNumSeeds();
     }
 
+    public void setHouseSeedCount(int houseIndex, int seeds) {
+        if (houseIndex < 0 || houseIndex > Settings.NUM_HOUSES_PER_PLAYER-1) {
+            return;
+        }
+        pits.get(houseIndex).setNumSeeds(seeds);
+    }
+
+    public void incrementHouseSeedCount(int houseIndex, int count) {
+        if (houseIndex < 0 || houseIndex > Settings.NUM_HOUSES_PER_PLAYER-1) {
+            return;
+        }
+        int numSeeds = getHouseSeedCount(houseIndex) + count;
+        pits.get(houseIndex).setNumSeeds(numSeeds);
+    }
+
     public int getStoreSeedCount() {
         return pits.get(this.storeIndex).getNumSeeds();
+    }
+
+    public void setStoreSeedCount(int seeds) {
+        pits.get(this.storeIndex).setNumSeeds(seeds);
+    }
+
+    public void incrementStoreSeedCount(int count) {
+        int numSeeds = getStoreSeedCount() + count;
+        pits.get(this.storeIndex).setNumSeeds(numSeeds);
     }
 }

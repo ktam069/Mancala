@@ -123,6 +123,7 @@ public class MancalaGame {
         int newScore;
         ArrayList<Integer> scores = new ArrayList<Integer>();
 
+        // Get an ArrayList of the players' final scores
         for (int i = 0; i < Settings.NUM_PLAYERS; i++) {
             newScore = board.getStoreSeeds(i);
             ioConsole.printPlayerScore(i, newScore);

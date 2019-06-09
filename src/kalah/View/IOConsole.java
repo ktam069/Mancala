@@ -6,14 +6,14 @@ import java.util.List;
 
 public class IOConsole implements ViewInterface {
     private IO io;
-    private ASCIIBoard asciiBoard;
+    private ASCIIBoardInterface asciiBoard;
 
     public IOConsole(IO io) {
         this.io = io;
     }
 
     @Override
-    public void setASCIIBoard(ASCIIBoard asciiBoard) {
+    public void setASCIIBoard(ASCIIBoardInterface asciiBoard) {
         this.asciiBoard = asciiBoard;
     }
 

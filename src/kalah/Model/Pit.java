@@ -43,8 +43,6 @@ public abstract class Pit {
         }
     }
 
-    // TODO: Potentially refactor the use of this so that only houses has this method
-    // ... i.e. use add or remove seed methods instead
     public void setNumSeeds(int seeds) {
         if (seeds > getNumSeeds()) {
             this.addSeeds(seeds-getNumSeeds());

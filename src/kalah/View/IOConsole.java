@@ -6,9 +6,15 @@ import java.util.List;
 
 public class IOConsole implements ViewInterface {
     private IO io;
+    private ASCIIBoard asciiBoard;
 
     public IOConsole(IO io) {
         this.io = io;
+    }
+
+    @Override
+    public void setASCIIBoard(ASCIIBoard asciiBoard) {
+        this.asciiBoard = asciiBoard;
     }
 
     @Override
@@ -23,7 +29,9 @@ public class IOConsole implements ViewInterface {
 
     @Override
     public void printGameState(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
-        List<String> linesToPrint = ASCIIBoard.formatBoardAsLines(storeSeeds, houseSeedsList);
+        if (asciiBoard == null) { return; }
+
+        List<String> linesToPrint = asciiBoard.formatBoardAsLines(storeSeeds, houseSeedsList);
 
         for (String line : linesToPrint) {
             io.println(line);

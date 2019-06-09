@@ -3,6 +3,8 @@ package kalah.View;
 import java.util.List;
 
 public interface ViewInterface {
+    void setASCIIBoard(ASCIIBoard asciiBoard);
+
     void printInvalidInput();
 
     void printInvalidMove();

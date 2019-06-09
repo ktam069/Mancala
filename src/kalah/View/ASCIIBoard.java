@@ -5,7 +5,7 @@ import kalah.Settings;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HorizontalASCIIBoard implements ASCIIBoardInterface {
+public class ASCIIBoard implements ASCIIBoardInterface {
     @Override
     public List<String> formatBoardAsLines(List<Integer> storeSeeds, List<List<Integer>> houseSeedsList) {
         List<String> asciiLines = new ArrayList<String>();

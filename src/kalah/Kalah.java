@@ -7,7 +7,7 @@ import kalah.Controller.MancalaGame;
 import kalah.Model.Board;
 import kalah.Model.ModelInterface;
 import kalah.View.ASCIIBoardInterface;
-import kalah.View.HorizontalASCIIBoard;
+import kalah.View.ASCIIBoard;
 import kalah.View.IOConsole;
 import kalah.View.ViewInterface;
 
@@ -26,7 +26,7 @@ public class Kalah {
 		ViewInterface ioConsole = new IOConsole(io);
 
 		// Set the board layout used
-		ASCIIBoardInterface asciiBoard = new HorizontalASCIIBoard();
+		ASCIIBoardInterface asciiBoard = new ASCIIBoard();
 		ioConsole.setASCIIBoard(asciiBoard);
 
 		// Create and instantiate the game board

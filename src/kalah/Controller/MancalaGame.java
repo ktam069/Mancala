@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MancalaGame {
+public class MancalaGame implements ControllerInterface {
     private ViewInterface ioConsole;
     private ModelInterface board;
 
@@ -18,6 +18,7 @@ public class MancalaGame {
         this.board = model;
     }
 
+    @Override
     public void run() {
         boolean moveMade;
         boolean gameEnded = false;
